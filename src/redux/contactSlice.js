@@ -1,32 +1,50 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
+import { fetchContacts, addContact, deleteContact } from './api';
+
+const handlePending = state => {
+  state.isLoading = true;
+};
+
+const handleRejected = (state, action) => {
+  state.isLoading = false;
+  state.error = action.payload;
+};
 
 
 const contactSlice = createSlice({
     name: 'contacts',
     initialState: {
-        contacts: [],
+        items: [],
+        isLoading: false,
+        error: null,
     },
-    reducers: {
-        addContact: (state, action) => {
-            state.contacts = [...state.contacts, action.payload];
+    extraReducers: {
+        [fetchContacts.pending]: handlePending,
+        [fetchContacts.rejected]: handleRejected,
+        [fetchContacts.fulfilled](state, action) {
+            state.isLoading = false;
+            state.error = null;
+            state.items = action.payload;
         },
-        
-        deleteContact: (state, action) => {
-            state.contacts = action.payload;
+    
+        [addContact.pending]: handlePending,
+        [addContact.rejected]: handleRejected,
+        [addContact.fulfilled](state, action) {
+            state.isLoading = false;
+            state.error = null;
+            state.items.push(action.payload);
+        },
+        [deleteContact.pending]: handlePending,
+        [deleteContact.rejected]: handleRejected,
+        [deleteContact.fulfilled](state, action) {
+            state.isLoading = false;
+            state.error = null;
+            const index = state.items.findIndex(
+                contact => contact.id === action.payload.id
+            );
+            state.items.splice(index, 1);
         },
     },
 });
 
-export const { deleteContact, addContact } = contactSlice.actions;
-
-const persistConfig = {
-  key: 'contactsList',
-  storage,
-};
-
-export const persistedContactsReducer = persistReducer(
-  persistConfig,
-  contactSlice.reducer
-);
+export const contactsReducer = contactSlice.reducer;

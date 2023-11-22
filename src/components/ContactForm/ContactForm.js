@@ -3,7 +3,7 @@ import * as Yup from 'yup';
 import { FormContainer } from './ContactForm.styled';
 import { useDispatch, useSelector } from 'react-redux';
 import { addContact } from 'redux/contactSlice';
-import { nanoid } from 'nanoid';
+import { getContacts } from 'redux/selectors';
 
 
 const SignupSchema = Yup.object().shape({
@@ -17,19 +17,20 @@ const SignupSchema = Yup.object().shape({
 
 export const ContactForm = () => {
   const dispatch = useDispatch();
-  const contactName = useSelector(state => state.contacts.contacts);
+  const contactName = useSelector(getContacts);
 
-   const onAdd = (newContact, contactName) => {
-    const normalizedName = newContact.name.toLowerCase();
+  const handleSubmite = (newContact, contactName) => {
+    const normalizeName = newContact.name.toLowerCase();
     let duplicatedName = contactName.some(
-      contact => contact.name.toLowerCase() === normalizedName
-     );
+      contact => contact.name.toLowerCase() === normalizeName
+    );
+  
      
     if (duplicatedName) {
       alert(`${newContact.name} is already in contacts.`);
       return;
     }
-    dispatch(addContact({ ...newContact, id: nanoid() }));
+    dispatch(addContact({name: newContact.name, phone:newContact.phone }));
   };
 
   return (
@@ -41,7 +42,7 @@ export const ContactForm = () => {
         }}
         validationSchema={SignupSchema}
         onSubmit={(values, actions) => {
-          onAdd(values, contactName);
+          handleSubmite(values, contactName);
           actions.resetForm();
         }}
       >
