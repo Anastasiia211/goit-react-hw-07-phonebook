@@ -19,7 +19,7 @@ export const App = () => {
 
 
   return (
-    <div className='numberCard'>
+   <div className="numberCard">
       <h1>Phonebook</h1>
       <ContactForm />
       <h2>Contacts</h2>

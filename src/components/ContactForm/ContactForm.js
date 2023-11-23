@@ -11,16 +11,16 @@ const SignupSchema = Yup.object().shape({
         .min(2, 'Too Short!')
         .max(50, 'Too Long!')
         .required('Reguired'),
-    number: Yup.number().min(2, 'Too Short!').required('Required'),
+    phone: Yup.number().min(2, 'Too Short!').required('Required'),
 });
 
 
 export const ContactForm = () => {
   const dispatch = useDispatch();
   
-  const contactNameTest  = useSelector(getContacts);
+  const contactNameTest = useSelector(getContacts);
 
-  const handleSubmite = (newContact, contactNameTest ) => {
+  const handleSubmit = (newContact, contactNameTest) => {
     const normalizedName = newContact.name.toLowerCase();
     let duplicatedName = contactNameTest.some(
       contact => contact.name.toLowerCase() === normalizedName
@@ -31,7 +31,7 @@ export const ContactForm = () => {
       alert(`${newContact.name} is already in contacts.`);
       return;
     }
-    dispatch(addContact({name: newContact.name, phone:newContact.phone }));
+    dispatch(addContact({ name: newContact.name, phone:newContact.phone }));
   };
 
   return (
@@ -39,11 +39,11 @@ export const ContactForm = () => {
       <Formik
         initialValues={{
           name: '',
-          number: '',
+          phone: '',
         }}
         validationSchema={SignupSchema}
         onSubmit={(values, actions) => {
-          handleSubmite(values, contactNameTest );
+          handleSubmit(values, contactNameTest );
           actions.resetForm();
         }}
       >
@@ -54,14 +54,14 @@ export const ContactForm = () => {
             <ErrorMessage name="name" />
           </div>
           <div className="container">
-            <label htmlFor="number">Number</label>
+            <label htmlFor="phone">Phone</label>
             <Field
               type="tel"
-              id="number"
-              name="number"
-              placeholder="XXX-XX-XXXXX"
+              id="phone"
+              name="phone"
+              placeholder="459-12-56XXX"
             />
-            <ErrorMessage name="number" />
+            <ErrorMessage name="phone" />
           </div>
 
           <button type="submit" className="btn btn-submit">

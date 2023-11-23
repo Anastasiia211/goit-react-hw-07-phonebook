@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectVisibleContacts } from 'redux/selectors';
 
 export const ContactList = () => {
-    
     const selectContacts = useSelector(selectVisibleContacts);
+   
     const dispatch = useDispatch();
     const handleDelete = evt => dispatch(deleteContact(evt.target.id));
 
@@ -15,14 +15,15 @@ export const ContactList = () => {
                 <ListItem key={contact.id}>
                     <p>
                         <span>{contact.name}: </span>
-                        <span>{contact.number}</span>
+                        <span>{contact.phone}</span>
                     </p>
+
                     <button
                         type="button"
-                        id={contact.id
-                        }
+                        id={contact.id}
                         className='btn btn-submit'
-                        onClick={handleDelete}>
+                        onClick={handleDelete}
+                    >
                         Delete
                     </button>
                 </ListItem>
