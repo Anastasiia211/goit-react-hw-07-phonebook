@@ -1,16 +1,17 @@
 import { List, ListItem } from './ContactList.styled';
-import { deleteContact } from 'redux/contactSlice';
+import { deleteContact } from 'redux/api';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectVisibleContacts } from 'redux/selectors';
 
 export const ContactList = () => {
-    const visibleContacts = useSelector(selectVisibleContacts);
+    
+    const selectContacts = useSelector(selectVisibleContacts);
     const dispatch = useDispatch();
-  const handleDelete = evt => dispatch(deleteContact(evt.target.id));
+    const handleDelete = evt => dispatch(deleteContact(evt.target.id));
 
     return (
         <List>
-            {visibleContacts.map(contact => (
+            {selectContacts.map(contact => (
                 <ListItem key={contact.id}>
                     <p>
                         <span>{contact.name}: </span>
@@ -18,7 +19,8 @@ export const ContactList = () => {
                     </p>
                     <button
                         type="button"
-                        id={contact.name}
+                        id={contact.id
+                        }
                         className='btn btn-submit'
                         onClick={handleDelete}>
                         Delete

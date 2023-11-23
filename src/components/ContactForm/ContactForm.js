@@ -2,7 +2,7 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { FormContainer } from './ContactForm.styled';
 import { useDispatch, useSelector } from 'react-redux';
-import { addContact } from 'redux/contactSlice';
+import { addContact } from 'redux/api';
 import { getContacts } from 'redux/selectors';
 
 
@@ -17,12 +17,13 @@ const SignupSchema = Yup.object().shape({
 
 export const ContactForm = () => {
   const dispatch = useDispatch();
-  const contactName = useSelector(getContacts);
+  
+  const contactNameTest  = useSelector(getContacts);
 
-  const handleSubmite = (newContact, contactName) => {
-    const normalizeName = newContact.name.toLowerCase();
-    let duplicatedName = contactName.some(
-      contact => contact.name.toLowerCase() === normalizeName
+  const handleSubmite = (newContact, contactNameTest ) => {
+    const normalizedName = newContact.name.toLowerCase();
+    let duplicatedName = contactNameTest.some(
+      contact => contact.name.toLowerCase() === normalizedName
     );
   
      
@@ -42,7 +43,7 @@ export const ContactForm = () => {
         }}
         validationSchema={SignupSchema}
         onSubmit={(values, actions) => {
-          handleSubmite(values, contactName);
+          handleSubmite(values, contactNameTest );
           actions.resetForm();
         }}
       >
